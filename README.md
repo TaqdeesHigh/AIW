@@ -2,6 +2,10 @@
 
 A modern and responsive web application built with Next.js for interacting with AI models.
 
+![image](https://github.com/user-attachments/assets/d2dfa78e-7df5-4810-93ce-cdf2d776cd07)
+
+![image](https://github.com/user-attachments/assets/cc2c4392-2188-4179-a923-18f7371abd95)
+
 ## Overview
 
 **AIW** offers a sleek, user-friendly interface for engaging with various AI models. It serves as a frontend that can be easily connected to any AI API backend of your choice.
@@ -187,3 +191,7 @@ yarn build
 ## License
 
 This project is licensed under the MIT License. See the `LICENSE` file for details.
+
+## Author 
+
+Taqdees
