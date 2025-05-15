@@ -1,5 +1,6 @@
-import { FiUser } from 'react-icons/fi';
+import { FiUser, FiFile } from 'react-icons/fi';
 import styles from '../page.module.css';
+import FileAttachment from './FileAttachment';
 
 export default function ChatArea({ messages, loading, messagesEndRef }) {
   return (
@@ -14,6 +15,31 @@ export default function ChatArea({ messages, loading, messagesEndRef }) {
           </div>
           <div className={styles.messageContent}>
             {message.content}
+            
+            {message.files && message.files.length > 0 && (
+              <div className={styles.messageFiles}>
+                {message.files.map((file, fileIndex) => (
+                  <div key={fileIndex} className={styles.embeddedFile}>
+                    {file.type === 'image' ? (
+                      <img 
+                        src={file.content || file.preview} 
+                        alt={file.name} 
+                        className={styles.inlineImage} 
+                      />
+                    ) : (
+                      <div className={styles.inlineFile}>
+                        <div className={styles.inlineFileHeader}>
+                          <FiFile /> {file.name}
+                        </div>
+                        {file.content && (
+                          <pre className={styles.inlineText}>{file.content}</pre>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         </div>
       ))}

@@ -10,6 +10,7 @@ import InputForm from './components/InputForm';
 import WelcomeScreen from './components/WelcomeScreen';
 import useChat from './hooks/useChat';
 
+// Updated Home.jsx
 export default function Home() {
   const [isClient, setIsClient] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -23,7 +24,8 @@ export default function Home() {
     chatStarted,
     setInputValue,
     handleSubmit,
-    startNewChat
+    startNewChat,
+    handleFileUpload
   } = useChat({ messagesEndRef, inputRef });
 
   useEffect(() => {
@@ -65,14 +67,16 @@ export default function Home() {
             <ChatArea 
               messages={messages} 
               loading={loading} 
-              messagesEndRef={messagesEndRef} 
+              messagesEndRef={messagesEndRef}
             />
-            
+
             <InputForm 
               inputValue={inputValue}
               setInputValue={setInputValue}
               handleSubmit={handleSubmit}
               inputRef={inputRef}
+              loading={loading}
+              handleFileUpload={handleFileUpload}
             />
           </>
         )}
