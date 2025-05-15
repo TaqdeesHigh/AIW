@@ -1,36 +1,189 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# AIW - AI Web Interface
 
-## Getting Started
+A modern and responsive web application built with Next.js for interacting with AI models.
 
-First, run the development server:
+## Overview
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+**AIW** offers a sleek, user-friendly interface for engaging with various AI models. It serves as a frontend that can be easily connected to any AI API backend of your choice.
+
+## Features
+
+* Clean, modern UI with responsive design
+* Support for multiple AI models
+* Conversation history management
+* Interactive chat interface with loading indicators
+* Sidebar with model selection and chat history
+* Example queries for quick start
+
+### Installation
+
+1. Clone the repository:
+
+   ```bash
+   git clone https://github.com/TaqdeesHigh/aiw.git
+   cd aiw
+   ```
+
+2. Install dependencies:
+
+   ```bash
+   npm install
+   # or
+   yarn install
+   ```
+
+3. Run the development server:
+
+   ```bash
+   npm run dev
+   # or
+   yarn dev
+   ```
+
+4. Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+## Connecting Your Own AI Models
+
+The application is designed for easy integration with any AI API. Follow the steps below to connect your own models:
+
+### 1. Modify the `useChat.js` Hook
+
+Update `src/app/hooks/useChat.js` to replace the placeholder logic with your actual API call:
+
+```js
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  if (!inputValue.trim()) return;
+
+  if (!chatStarted) setChatStarted(true);
+
+  const userMessage = { role: 'user', content: inputValue };
+  setMessages(prev => [...prev, userMessage]);
+  setInputValue('');
+  setLoading(true);
+
+  try {
+    const response = await fetch('your-ai-api-endpoint', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer your-api-key' // If required
+      },
+      body: JSON.stringify({
+        messages: [...messages, userMessage],
+        model: selectedModel,
+        // Include other API parameters as needed
+      })
+    });
+
+    const data = await response.json();
+
+    setMessages(prev => [...prev, {
+      role: 'assistant',
+      content: data.response // Adjust based on API response structure
+    }]);
+  } catch (error) {
+    console.error('Error calling AI API:', error);
+    setMessages(prev => [...prev, {
+      role: 'assistant',
+      content: 'Sorry, an error occurred. Please try again.'
+    }]);
+  } finally {
+    setLoading(false);
+  }
+};
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 2. Add Your AI Models
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+Update the model list in `src/app/components/Sidebar.js`:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```jsx
+<div className={styles.modelList}>
+  <div className={`${styles.modelItem} ${styles.active}`}>
+    <div className={styles.modelDot}></div>
+    <div className={styles.modelDetails}>
+      <span className={styles.modelName}>Your Model Name</span>
+      <span className={styles.modelDesc}>Your Model Description</span>
+    </div>
+  </div>
+  {/* Add more model items here */}
+</div>
+```
 
-## Learn More
+### 3. Implement Model Selection
 
-To learn more about Next.js, take a look at the following resources:
+Update `page.js` to handle selected model state:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```jsx
+const [selectedModel, setSelectedModel] = useState('default-model');
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+<Sidebar
+  sidebarOpen={sidebarOpen}
+  toggleSidebar={toggleSidebar}
+  startNewChat={startNewChat}
+  messages={messages}
+  selectedModel={selectedModel}
+  setSelectedModel={setSelectedModel}
+/>
 
-## Deploy on Vercel
+const {
+  messages,
+  inputValue,
+  loading,
+  chatStarted,
+  setInputValue,
+  handleSubmit,
+  startNewChat
+} = useChat({ messagesEndRef, inputRef, selectedModel });
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+In `Sidebar.js`, implement model selection:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```js
+const handleModelSelect = (modelId) => {
+  setSelectedModel(modelId);
+};
+
+<div className={styles.modelList}>
+  <div
+    className={`${styles.modelItem} ${selectedModel === 'standard' ? styles.active : ''}`}
+    onClick={() => handleModelSelect('standard')}
+  >
+    {/* Model UI */}
+  </div>
+</div>
+```
+
+## Customizing the Interface
+
+### CSS Styling
+
+All styles are located in `src/app/page.module.css`. You can customize layout, colors, and spacing here.
+
+## Adding Features
+
+* **Message Attachments**: Implement file upload in `InputForm.js`
+* **Authentication**: Create login/signup components
+* **User Preferences**: Add a settings page for AI behavior customization
+
+## Deployment
+
+### Deploy to Vercel
+
+```bash
+npm install -g vercel
+vercel
+```
+
+### Build for Production
+
+```bash
+npm run build
+# or
+yarn build
+```
+
+## License
+
+This project is licensed under the MIT License. See the `LICENSE` file for details.
