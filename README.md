@@ -165,12 +165,6 @@ const handleModelSelect = (modelId) => {
 
 All styles are located in `src/app/page.module.css`. You can customize layout, colors, and spacing here.
 
-## Adding Features
-
-* **Message Attachments**: Implement file upload in `InputForm.js`
-* **Authentication**: Create login/signup components
-* **User Preferences**: Add a settings page for AI behavior customization
-
 ## Deployment
 
 ### Deploy to Vercel
