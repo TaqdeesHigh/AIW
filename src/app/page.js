@@ -10,7 +10,6 @@ import InputForm from './components/InputForm';
 import WelcomeScreen from './components/WelcomeScreen';
 import useChat from './hooks/useChat';
 
-// Updated Home.jsx
 export default function Home() {
   const [isClient, setIsClient] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
